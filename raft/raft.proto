@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package consensus.raft;
+
+message RequestVote {
+  message Argument {
+    // The term for this request.
+    optional int64 term = 1;
+    // ID of the candidate.
+    optional int64 candidate_id = 2;
+    // Index of the candidate's last log entry.
+    optional int64 last_log_index = 3;
+    // Term of the candidate's last log entry.
+    optional int64 last_log_term = 4;
+  }
+  message Result {
+    // The current term, for the candidate to update itself.
+    optional int64 term = 1;
+    // True if the the candidate received the vote.
+    optional bool vote_granted = 2;
+  }
+}
+
+message LogEntry {
+}
+
+message AppendEntries {
+  message Argument {
+    // Leader's term.
+    optional int64 term = 1;
+    // Leader ID, so a follower can redicrect clients to current leader.
+    optional string leader_id = 2;
+    // Index of log entry immediately preceding new ones.
+    optional int64 prev_log_index = 3;
+    // Log entries to store (empty for heartbeat; may send more than one for efficiency).
+    repeated LogEntry log_entries = 4;
+    // Leader's commit index.
+    optional int64 leader_commit_index = 5;
+  }
+  message Result {
+    // Current term, for leader to update itself.
+    optional int64 term = 1;
+    // True if follower contained entry matching prev_log_index, and prev_log_term.
+    optional bool success = 2;
+  }
+}
