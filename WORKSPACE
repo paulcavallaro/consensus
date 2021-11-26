@@ -14,6 +14,20 @@ load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_
 rules_proto_dependencies()
 rules_proto_toolchains()
 
+# gRPC
+http_archive(
+    name = "com_github_grpc_grpc",
+    sha256 = "b2f2620c762427bfeeef96a68c1924319f384e877bc0e084487601e4cc6e434c",
+    urls = [
+        "https://github.com/grpc/grpc/archive/refs/tags/v1.42.0.tar.gz",
+    ],
+    strip_prefix = "grpc-1.42.0",
+)
+load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
+grpc_deps()
+load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
+grpc_extra_deps()
+
 # Abseil LTS archive version 20210324.2
 http_archive(
   name = "com_google_absl",

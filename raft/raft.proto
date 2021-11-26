@@ -3,7 +3,7 @@ syntax = "proto3";
 package consensus.raft;
 
 message RequestVote {
-  message Argument {
+  message Request {
     // The term for this request.
     optional int64 term = 1;
     // ID of the candidate.
@@ -13,7 +13,7 @@ message RequestVote {
     // Term of the candidate's last log entry.
     optional int64 last_log_term = 4;
   }
-  message Result {
+  message Response {
     // The current term, for the candidate to update itself.
     optional int64 term = 1;
     // True if the the candidate received the vote.
@@ -25,7 +25,7 @@ message LogEntry {
 }
 
 message AppendEntries {
-  message Argument {
+  message Request {
     // Leader's term.
     optional int64 term = 1;
     // Leader ID, so a follower can redicrect clients to current leader.
@@ -37,10 +37,18 @@ message AppendEntries {
     // Leader's commit index.
     optional int64 leader_commit_index = 5;
   }
-  message Result {
+  message Response {
     // Current term, for leader to update itself.
     optional int64 term = 1;
     // True if follower contained entry matching prev_log_index, and prev_log_term.
     optional bool success = 2;
   }
+}
+
+service RaftService {
+  // Requests a leadership vote.
+  rpc RequestVote (RequestVote.Request) returns (RequestVote.Response) {}
+
+  // Appends and replicates log entries.
+  rpc AppendEntries (AppendEntries.Request) returns (AppendEntries.Response) {}
 }
