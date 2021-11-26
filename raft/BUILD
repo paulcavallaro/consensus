@@ -26,7 +26,6 @@ cc_grpc_library(
     grpc_only = True,
 )
 
-
 cc_library(
     name = "server",
     hdrs = [
