@@ -20,23 +20,23 @@ cc_grpc_library(
     srcs = [
         ":raft_proto",
     ],
+    grpc_only = True,
     deps = [
         ":raft_cc_proto",
     ],
-    grpc_only = True,
 )
 
 cc_library(
     name = "server",
-    hdrs = [
-        "server.h",
-    ],
     srcs = [
         "server.cc",
     ],
+    hdrs = [
+        "server.h",
+    ],
     deps = [
-        ":raft_cc_proto",
         ":raft_cc_grpc",
+        ":raft_cc_proto",
         "@com_github_grpc_grpc//:grpc++",
     ],
 )
